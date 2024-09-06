@@ -10,6 +10,7 @@ Original file is located at
 import numpy as np
 import matplotlib.pyplot as plt
 import torch
+import math
 
 t = np.linspace(0,40,1000)
 
@@ -246,7 +247,126 @@ from PIL import Image
 
 !wget https://static.scientificamerican.com/sciam/cache/file/4BC816FB-F21A-49C2-A9CB4D85FD64EF69_source.jpg
 
+# Moore Penrose PseudoINverse for Non Square Matrix
+
+# A+ = UT D+ V -  Moore Penrose equation for Non Square matrix
+
+# We KNOW that SVD - is applied on square matrix
+# SVD =  U D VT
+# U = M * M matrix, VT =  N * N matrix, D = Diagonal, M * N matrix
+
+A = np.array([[3,6],[6,2],[7,3]]) # NON Squared Matrix or Non SIngular Matrix
+A
+
+U,D,VT =  np.linalg.svd(A)
+
+U
+
+D
+D = np.diag(D)
+D
+
+1/11.28019116
+
+1/3.969545
+
+VT
+
+DPlus = np.linalg.inv(D)
+DPlus
+
+UT =  U.T
+UT
+
+V = VT.T
+V
+
+# DIRECT NUMPY LIBRARY TO FIND THE PSEUDOINVERSE
+A =  np.array([[4,3,5],[2,6,7]])
+A
+
+MOOREPENROSE =  np.linalg.pinv(A)
+MOOREPENROSE
+
+# MOORE PENROSE PSEUDOINVERSE IN REAL LIFE LINEAR REGRESSION
+# y = mx + B
+#  m = slope, B = intercept
+x =  [1,2,3,4,5,6]
+y = [1.54,2.34,3.34,4.42,5.56,6.43]
+
+x
+
+len(x)
+
+y
+
+fig , ax =  plt.subplots()
+plt.title('Linear regression Moore Penrose PSeudoInverse TEST')
+plt.xlabel("X points")
+plt.ylabel("Y points")
+_ = ax.scatter(x,y)
+
+X0 = np.ones(len(x))
+X0
+
+np.matrix(X0).T
+
+np.matrix(x).T
+
+Xnew = np.concatenate((np.matrix(X0).T, np.matrix(x).T), axis=1)
+Xnew
+
+# find wieghts from the equation
+# WE WILL GET SLOPE AND INTERCEPT USING THE MOORE PENROSE PSEUDOINVERSE
 
 
+# Y =  WX
+# Y * X-1 = W
+# W =  Y X+
 
+W = np.dot(np.linalg.pinv(Xnew),y)
+W
+
+# Y INtercept =  W[0][0] = 0.41933333
+# Slope of the Line =  W[0][1]
+
+WValues =  np.asarray(W)
+YIntercept = WValues[0][0]
+YSlope = WValues[0][1]
+
+YIntercept
+
+YSlope
+
+"""# PARTIAL Derivativrs using torch
+#Example = volume of Cylinder
+#V =  pie * r*r * l
+
+---
+
+
+"""
+
+r =  torch.tensor(3.).requires_grad_()
+r
+
+l =  torch.tensor(5.).requires_grad_()
+l
+
+v =  math.pi * r**2 * l
+v
+
+v.backward()
+
+l.grad
+
+#derivate wrt to l
+v=  math.pi * r**2
+v
+
+r.grad
+
+#derivate wrt to r
+v=  math.pi * l * 2 * r
+v
 
